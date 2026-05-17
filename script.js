@@ -23,31 +23,44 @@ const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
         // Get form data
         const formData = new FormData(contactForm);
         const name = formData.get('name');
         const email = formData.get('email');
         const subject = formData.get('subject');
         const message = formData.get('message');
-        
+
         // Validate form
         if (!name || !email || !subject || !message) {
+            e.preventDefault();
             alert('Please fill in all fields');
             return;
         }
-        
+
         // Validate email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
+            e.preventDefault();
             alert('Please enter a valid email address');
             return;
         }
-        
-        // Show success message (in production, this would send to a server)
-        alert(`Thank you for your message, ${name}! We will get back to you soon.`);
-        contactForm.reset();
+
+        // If form is Netlify-ready, allow normal submit (Netlify will handle it).
+        // If not, fallback to mailto link behavior.
+        const isNetlify = contactForm.dataset.netlify === "true" || contactForm.hasAttribute('data-netlify');
+        if (!isNetlify) {
+            e.preventDefault();
+            // Construct mailto fallback
+            const mailto = `mailto:pillarschoolprimary@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
+            window.location.href = mailto;
+            // Show a confirmation alert as well
+            alert('Your email client should open. If it does not, please email pillarschoolprimary@gmail.com');
+            contactForm.reset();
+            return;
+        }
+
+        // If Netlify, let the form submit normally — optionally show a short message.
+        // For better UX, you could show a loading state here.
     });
 }
 

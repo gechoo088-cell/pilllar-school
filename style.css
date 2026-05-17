@@ -318,6 +318,28 @@ section h2::after {
     font-weight: bold;
 }
 
+/* Gallery Section (placeholder styles) */
+.gallery {
+    background: var(--light-bg);
+}
+
+.gallery-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    border-radius: 8px;
+}
+
+.gallery-placeholder {
+    color: #666;
+    font-size: 1.1rem;
+    padding: 2rem 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
 /* Contact Section */
 .contact {
     background: var(--light-bg);
